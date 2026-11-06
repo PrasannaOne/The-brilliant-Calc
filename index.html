@@ -10,7 +10,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#09090d">
-  <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIlRoZSBCcmlsbGlhbnQgQ2FsYyIsCiAgInNob3J0X25hbWUiOiAiQnJpbGxpYW50IENhbGMiLAogICJzdGFydF91cmwiOiAiLi9UaGVfQnJpbGxpYW50X0NhbGMuaHRtbCIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzA5MDkwZCIsCiAgInRoZW1lX2NvbG9yIjogIiMwOTA5MGQiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDUxMiA1MTInJTNFJTNDcmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgcng9JzEyOCcgZmlsbD0nJTIzMTIxMjE4Jy8lM0UlM0N0ZXh0IHg9JzUwJTI1JyB5PSc1NSUyNScgZm9udC1mYW1pbHk9J3N5c3RlbS11aSwgc2Fucy1zZXJpZicgZm9udC13ZWlnaHQ9J2JvbGQnIGZvbnQtc2l6ZT0nMjIwJyBmaWxsPSclMjNhODU1ZjcnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdtaWRkbGUnJTNFJUMzJUI3JTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
 
   <style>
     * {
@@ -45,7 +44,6 @@
       position: relative;
     }
 
-    /* Clean Title Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -83,16 +81,16 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .icon-btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #cbd5e1;
-      width: 40px;
-      height: 40px;
-      border-radius: 13px;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -106,7 +104,6 @@
       color: #ffffff;
     }
 
-    /* Display Area */
     .display {
       flex: 1;
       display: flex;
@@ -140,7 +137,6 @@
       display: none;
     }
 
-    /* Keypad */
     .keypad {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -199,7 +195,6 @@
       opacity: 0.9;
     }
 
-    /* Shared Backdrop & Bottom Sheets */
     .backdrop {
       position: absolute;
       inset: 0;
@@ -285,7 +280,6 @@
       transform: scale(0.95);
     }
 
-    /* History List */
     .history-list {
       flex: 1;
       overflow-y: auto;
@@ -326,7 +320,6 @@
       font-weight: 600;
     }
 
-    /* Info Sheet Content */
     .creator-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.05);
@@ -351,7 +344,6 @@
       color: #64748b;
     }
 
-    /* Setting Toggle Row */
     .setting-row {
       display: flex;
       align-items: center;
@@ -368,7 +360,6 @@
       color: #f1f5f9;
     }
 
-    /* iOS style switch */
     .switch {
       position: relative;
       display: inline-block;
@@ -465,6 +456,21 @@
       color: #94a3b8;
     }
   </style>
+  <!-- Open Graph / Social Media Preview Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The Brilliant Calc 🧠✨">
+  <meta property="og:description" content="Confidently wrong, every single time. The sleek OLED calculator that loves to troll.">
+  <meta property="og:url" content="https://prasannaone.github.io/The-brilliant-Calc/">
+  <meta property="og:image" content="https://prasannaone.github.io/The-brilliant-Calc/preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter / X Summary Large Image -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Brilliant Calc 🧠✨">
+  <meta name="twitter:description" content="Confidently wrong, every single time. The sleek OLED calculator that loves to troll.">
+  <meta name="twitter:image" content="https://prasannaone.github.io/The-brilliant-Calc/preview.png">
+
 </head>
 <body>
 
@@ -476,13 +482,22 @@
       </div>
       <div class="header-actions">
         <button class="icon-btn" onclick="vibe(); openSheet('history')" aria-label="History">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
         </button>
+        <button class="icon-btn" onclick="vibe(); shareApp()" aria-label="Share">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
         <button class="icon-btn" onclick="vibe(); openSheet('info')" aria-label="Info">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="12" y1="16" x2="12" y2="12"></line>
             <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -520,13 +535,11 @@
       <button class="key" onclick="vibe(); appendInput('00')">00</button>
       <button class="key" onclick="vibe(); appendInput('0')">0</button>
       <button class="key" onclick="vibe(); appendInput('.')">.</button>
-      <button class="key btn-eq" onclick="vibe(12); calculate()">=</button>
+      <button class="key btn-eq" onclick="vibe(8); calculate()">=</button>
     </div>
 
-    <!-- Shared Backdrop -->
     <div class="backdrop" id="backdrop" onclick="closeSheets()"></div>
 
-    <!-- History Sheet -->
     <div class="sheet history-sheet" id="historySheet">
       <div class="sheet-top">
         <span class="sheet-title">History</span>
@@ -540,7 +553,6 @@
       </div>
     </div>
 
-    <!-- Info Sheet -->
     <div class="sheet info-sheet" id="infoSheet">
       <div class="sheet-top">
         <span class="sheet-title">About & Settings</span>
@@ -552,7 +564,6 @@
         <div class="tagline">Confidently wrong, every single time.</div>
       </div>
 
-      <!-- Haptics Toggle -->
       <div class="setting-row">
         <span class="setting-label">Haptic Feedback</span>
         <label class="switch">
@@ -621,7 +632,6 @@
     let tapCount = 0;
     let tapTimer = null;
 
-    // Load haptics preference (default true, or false if user turned off)
     let hapticsEnabled = localStorage.getItem('brilliant_calc_haptics') !== 'false';
     hapticsToggleEl.checked = hapticsEnabled;
 
@@ -629,7 +639,7 @@
 
     renderHistory();
 
-    function vibe(ms = 5) {
+    function vibe(ms = 3) {
       if (!hapticsEnabled || !navigator.vibrate) return;
       navigator.vibrate(ms);
     }
@@ -638,7 +648,23 @@
       hapticsEnabled = checkbox.checked;
       localStorage.setItem('brilliant_calc_haptics', hapticsEnabled);
       if (hapticsEnabled && navigator.vibrate) {
-        navigator.vibrate(8);
+        navigator.vibrate(5);
+      }
+    }
+
+    function shareApp() {
+      const shareData = {
+        title: 'The Brilliant Calc',
+        text: 'Check out The Brilliant Calc 🧠✨ — the calculator that is confidently wrong, every single time!',
+        url: 'https://prasannaone.github.io/The-brilliant-Calc/'
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(shareData.text + ' ' + shareData.url).then(() => {
+          alert('Link and message copied to clipboard!');
+        });
       }
     }
 
@@ -650,7 +676,7 @@
         panicMode = !panicMode;
         modeDotEl.classList.toggle('real-mode', panicMode);
         if (hapticsEnabled && navigator.vibrate) {
-          navigator.vibrate(panicMode ? [15, 30, 15] : 20);
+          navigator.vibrate(panicMode ? [10, 20, 10] : 12);
         }
         if (calculated && currentInput) {
           try {
