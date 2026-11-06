@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>The Brilliant Calc</title>
+
+  <!-- PWA & Native App Meta Tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#09090d">
+  <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIlRoZSBCcmlsbGlhbnQgQ2FsYyIsCiAgInNob3J0X25hbWUiOiAiQnJpbGxpYW50IENhbGMiLAogICJzdGFydF91cmwiOiAiLi9UaGVfQnJpbGxpYW50X0NhbGMuaHRtbCIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzA5MDkwZCIsCiAgInRoZW1lX2NvbG9yIjogIiMwOTA5MGQiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDUxMiA1MTInJTNFJTNDcmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgcng9JzEyOCcgZmlsbD0nJTIzMTIxMjE4Jy8lM0UlM0N0ZXh0IHg9JzUwJTI1JyB5PSc1NSUyNScgZm9udC1mYW1pbHk9J3N5c3RlbS11aSwgc2Fucy1zZXJpZicgZm9udC13ZWlnaHQ9J2JvbGQnIGZvbnQtc2l6ZT0nMjIwJyBmaWxsPSclMjNhODU1ZjcnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdtaWRkbGUnJTNFJUMzJUI3JTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: #09090d;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px 20px calc(24px + env(safe-area-inset-bottom, 12px)) 20px;
+      position: relative;
+    }
+
+    /* Clean Title Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 4px 0;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f1f5f9;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .title-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #a855f7;
+      box-shadow: 0 0 10px #a855f7;
+      display: inline-block;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .title-dot.real-mode {
+      background: #6366f1;
+      box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.92);
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    /* Display Area */
+    .display {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      text-align: right;
+      padding: 16px 6px 20px;
+      overflow: hidden;
+    }
+
+    .expression {
+      font-size: 22px;
+      color: #64748b;
+      min-height: 30px;
+      margin-bottom: 6px;
+      word-break: break-all;
+      transition: color 0.15s ease;
+    }
+
+    .result {
+      font-size: clamp(38px, 11vw, 60px);
+      font-weight: 600;
+      color: #f1f5f9;
+      letter-spacing: -1px;
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .result::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Keypad */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 12px;
+      height: 53dvh;
+      max-height: 410px;
+      min-height: 300px;
+    }
+
+    button.key {
+      border: 1px solid rgba(255, 255, 255, 0.035);
+      border-radius: 22px;
+      background: #121218;
+      color: #e2e8f0;
+      font-size: clamp(20px, 5vw, 25px);
+      font-weight: 400;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.12s ease, transform 0.08s ease;
+    }
+
+    button.key:active {
+      transform: scale(0.93);
+      background: #1e1f29;
+    }
+
+    .btn-fn {
+      background: #171720 !important;
+      color: #94a3b8 !important;
+      font-size: clamp(18px, 4.5vw, 22px) !important;
+    }
+
+    .btn-op {
+      background: #1a1528 !important;
+      color: #c084fc !important;
+      border-color: rgba(192, 132, 252, 0.1) !important;
+      font-size: clamp(22px, 5.5vw, 26px) !important;
+    }
+
+    .btn-op:active {
+      background: #281d3f !important;
+    }
+
+    .btn-eq {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+      color: #ffffff !important;
+      font-weight: 500 !important;
+      border: none !important;
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.28);
+    }
+
+    .btn-eq:active {
+      opacity: 0.9;
+    }
+
+    /* Shared Backdrop & Bottom Sheets */
+    .backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+      z-index: 10;
+    }
+
+    .backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sheet {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: calc(16px + env(safe-area-inset-bottom, 8px));
+      background: #13131b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(115%);
+      transition: transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1);
+      z-index: 20;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .sheet.open {
+      transform: translateY(0);
+    }
+
+    .history-sheet {
+      height: 62%;
+    }
+
+    .info-sheet {
+      height: auto;
+      gap: 14px;
+    }
+
+    .sheet-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .sheet-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .sheet-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .small-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: #cbd5e1;
+      padding: 6px 13px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .small-btn.clear {
+      background: rgba(244, 63, 94, 0.12);
+      color: #fb7185;
+    }
+
+    .small-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* History List */
+    .history-list {
+      flex: 1;
+      overflow-y: auto;
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .history-empty {
+      margin: auto;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.025);
+      border-radius: 16px;
+      cursor: pointer;
+    }
+
+    .history-item:active {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hist-expr {
+      color: #64748b;
+      font-size: 15px;
+    }
+
+    .hist-res {
+      color: #e2e8f0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    /* Info Sheet Content */
+    .creator-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 18px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .made-by {
+      font-size: 16px;
+      font-weight: 600;
+      color: #f8fafc;
+      margin-bottom: 3px;
+    }
+
+    .made-by span {
+      color: #c084fc;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* Setting Toggle Row */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: #181822;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .setting-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #f1f5f9;
+    }
+
+    /* iOS style switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+      cursor: pointer;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background-color: #272733;
+      transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #94a3b8;
+      transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #8b5cf6;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+      background-color: #ffffff;
+    }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: #181822;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+
+    .social-link:active {
+      transform: scale(0.97);
+      background: #222230;
+    }
+
+    .social-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .social-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(168, 85, 247, 0.12);
+      color: #c084fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .social-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .social-handle {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="title" onclick="handleTitleTap()">
+        <span>The Brilliant Calc</span>
+        <span class="title-dot" id="modeDot"></span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="vibe(); openSheet('history')" aria-label="History">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </button>
+        <button class="icon-btn" onclick="vibe(); openSheet('info')" aria-label="Info">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="display">
+      <div class="expression" id="expr"></div>
+      <div class="result" id="res">0</div>
+    </div>
+
+    <div class="keypad">
+      <button class="key btn-fn" onclick="vibe(); clearAll()">AC</button>
+      <button class="key btn-fn" onclick="vibe(); deleteLast()">⌫</button>
+      <button class="key btn-fn" onclick="vibe(); appendInput('%')">%</button>
+      <button class="key btn-op" onclick="vibe(); appendInput('÷')">÷</button>
+
+      <button class="key" onclick="vibe(); appendInput('7')">7</button>
+      <button class="key" onclick="vibe(); appendInput('8')">8</button>
+      <button class="key" onclick="vibe(); appendInput('9')">9</button>
+      <button class="key btn-op" onclick="vibe(); appendInput('×')">×</button>
+
+      <button class="key" onclick="vibe(); appendInput('4')">4</button>
+      <button class="key" onclick="vibe(); appendInput('5')">5</button>
+      <button class="key" onclick="vibe(); appendInput('6')">6</button>
+      <button class="key btn-op" onclick="vibe(); appendInput('-')">−</button>
+
+      <button class="key" onclick="vibe(); appendInput('1')">1</button>
+      <button class="key" onclick="vibe(); appendInput('2')">2</button>
+      <button class="key" onclick="vibe(); appendInput('3')">3</button>
+      <button class="key btn-op" onclick="vibe(); appendInput('+')">+</button>
+
+      <button class="key" onclick="vibe(); appendInput('00')">00</button>
+      <button class="key" onclick="vibe(); appendInput('0')">0</button>
+      <button class="key" onclick="vibe(); appendInput('.')">.</button>
+      <button class="key btn-eq" onclick="vibe(12); calculate()">=</button>
+    </div>
+
+    <!-- Shared Backdrop -->
+    <div class="backdrop" id="backdrop" onclick="closeSheets()"></div>
+
+    <!-- History Sheet -->
+    <div class="sheet history-sheet" id="historySheet">
+      <div class="sheet-top">
+        <span class="sheet-title">History</span>
+        <div class="sheet-actions">
+          <button class="small-btn clear" onclick="vibe(); clearHistory()">Clear</button>
+          <button class="small-btn" onclick="vibe(); closeSheets()">Done</button>
+        </div>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">No calculations yet</div>
+      </div>
+    </div>
+
+    <!-- Info Sheet -->
+    <div class="sheet info-sheet" id="infoSheet">
+      <div class="sheet-top">
+        <span class="sheet-title">About & Settings</span>
+        <button class="small-btn" onclick="vibe(); closeSheets()">Done</button>
+      </div>
+
+      <div class="creator-card">
+        <div class="made-by">Made by <span>Prasanna</span></div>
+        <div class="tagline">Confidently wrong, every single time.</div>
+      </div>
+
+      <!-- Haptics Toggle -->
+      <div class="setting-row">
+        <span class="setting-label">Haptic Feedback</span>
+        <label class="switch">
+          <input type="checkbox" id="hapticsToggle" onchange="toggleHaptics(this)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="social-links">
+        <a class="social-link" href="https://github.com/PrasannaOne" target="_blank" rel="noopener noreferrer" onclick="vibe()">
+          <div class="social-left">
+            <div class="social-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="social-label">GitHub</div>
+              <div class="social-handle">github.com/PrasannaOne</div>
+            </div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+
+        <a class="social-link" href="https://t.me/prasannaone" target="_blank" rel="noopener noreferrer" onclick="vibe()">
+          <div class="social-left">
+            <div class="social-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </div>
+            <div>
+              <div class="social-label">Telegram</div>
+              <div class="social-handle">@prasannaone</div>
+            </div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const exprEl = document.getElementById('expr');
+    const resEl = document.getElementById('res');
+    const historyListEl = document.getElementById('historyList');
+    const backdropEl = document.getElementById('backdrop');
+    const historySheetEl = document.getElementById('historySheet');
+    const infoSheetEl = document.getElementById('infoSheet');
+    const modeDotEl = document.getElementById('modeDot');
+    const hapticsToggleEl = document.getElementById('hapticsToggle');
+
+    let currentInput = '';
+    let calculated = false;
+    let lastResult = '0';
+    let panicMode = false;
+    let tapCount = 0;
+    let tapTimer = null;
+
+    // Load haptics preference (default true, or false if user turned off)
+    let hapticsEnabled = localStorage.getItem('brilliant_calc_haptics') !== 'false';
+    hapticsToggleEl.checked = hapticsEnabled;
+
+    let historyData = JSON.parse(localStorage.getItem('brilliant_calc_hist') || '[]');
+
+    renderHistory();
+
+    function vibe(ms = 5) {
+      if (!hapticsEnabled || !navigator.vibrate) return;
+      navigator.vibrate(ms);
+    }
+
+    function toggleHaptics(checkbox) {
+      hapticsEnabled = checkbox.checked;
+      localStorage.setItem('brilliant_calc_haptics', hapticsEnabled);
+      if (hapticsEnabled && navigator.vibrate) {
+        navigator.vibrate(8);
+      }
+    }
+
+    function handleTitleTap() {
+      tapCount++;
+      clearTimeout(tapTimer);
+      if (tapCount >= 3) {
+        tapCount = 0;
+        panicMode = !panicMode;
+        modeDotEl.classList.toggle('real-mode', panicMode);
+        if (hapticsEnabled && navigator.vibrate) {
+          navigator.vibrate(panicMode ? [15, 30, 15] : 20);
+        }
+        if (calculated && currentInput) {
+          try {
+            let sanitized = currentInput
+              .replace(/×/g, '*')
+              .replace(/÷/g, '/')
+              .replace(/%/g, '*0.01');
+            let exact = Function('"use strict";return (' + sanitized + ')')();
+            if (exact !== undefined && !isNaN(exact)) {
+              let cleanExact = Number.isInteger(exact) ? exact : +(exact.toFixed(4));
+              let updatedRes = panicMode ? cleanExact : getBrilliantResult(exact);
+              resEl.innerText = updatedRes;
+              lastResult = updatedRes;
+              if (historyData.length > 0 && historyData[0].expr === currentInput) {
+                historyData[0].res = updatedRes;
+                localStorage.setItem('brilliant_calc_hist', JSON.stringify(historyData));
+                renderHistory();
+              }
+            }
+          } catch (e) {}
+        }
+      } else {
+        tapTimer = setTimeout(() => {
+          tapCount = 0;
+        }, 450);
+      }
+    }
+
+    function appendInput(val) {
+      const isOperator = ['+', '-', '×', '÷', '%'].includes(val);
+
+      if (calculated) {
+        currentInput = isOperator ? String(lastResult) : '';
+        calculated = false;
+      }
+
+      currentInput += val;
+      exprEl.innerText = currentInput;
+    }
+
+    function clearAll() {
+      currentInput = '';
+      calculated = false;
+      lastResult = '0';
+      exprEl.innerText = '';
+      resEl.innerText = '0';
+    }
+
+    function deleteLast() {
+      if (calculated) calculated = false;
+      if (!currentInput) return;
+      currentInput = currentInput.slice(0, -1);
+      exprEl.innerText = currentInput;
+      if (!currentInput) resEl.innerText = '0';
+    }
+
+    function getBrilliantResult(num) {
+      if (isNaN(num) || !isFinite(num)) return num;
+
+      if (Math.abs(num) <= 15) {
+        const pool = [-2, -1, 1, 2];
+        const delta = pool[Math.floor(Math.random() * pool.length)];
+        return num + delta;
+      }
+
+      const sign = Math.random() < 0.5 ? -1 : 1;
+      const jitterPercent = (Math.random() * 0.022) + 0.003;
+      let rawDelta = num * jitterPercent * sign;
+
+      if (Number.isInteger(num)) {
+        let delta = Math.round(rawDelta);
+        if (delta === 0) delta = sign;
+        return num + delta;
+      } else {
+        let delta = +(rawDelta.toFixed(2));
+        if (delta === 0) delta = sign * 0.05;
+        return +(num + delta).toFixed(2);
+      }
+    }
+
+    function calculate() {
+      if (!currentInput || calculated) return;
+
+      try {
+        let sanitized = currentInput
+          .replace(/×/g, '*')
+          .replace(/÷/g, '/')
+          .replace(/%/g, '*0.01');
+
+        let exact = Function('"use strict";return (' + sanitized + ')')();
+        if (exact === undefined || isNaN(exact)) return;
+
+        let cleanExact = Number.isInteger(exact) ? exact : +(exact.toFixed(4));
+        let finalResult = panicMode ? cleanExact : getBrilliantResult(exact);
+
+        resEl.innerText = finalResult;
+        lastResult = finalResult;
+        calculated = true;
+
+        addHistory(currentInput, finalResult);
+      } catch (err) {
+        resEl.innerText = 'Error';
+      }
+    }
+
+    function addHistory(expr, res) {
+      historyData.unshift({ expr, res });
+      if (historyData.length > 50) historyData.pop();
+      localStorage.setItem('brilliant_calc_hist', JSON.stringify(historyData));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      if (historyData.length === 0) {
+        historyListEl.innerHTML = '<div class="history-empty">No calculations yet</div>';
+        return;
+      }
+      historyListEl.innerHTML = historyData.map((item, idx) => `
+        <div class="history-item" onclick="vibe(); loadFromHistory(${idx})">
+          <span class="hist-expr">${item.expr} =</span>
+          <span class="hist-res">${item.res}</span>
+        </div>
+      `).join('');
+    }
+
+    function loadFromHistory(index) {
+      const item = historyData[index];
+      currentInput = item.expr;
+      lastResult = item.res;
+      exprEl.innerText = item.expr;
+      resEl.innerText = item.res;
+      calculated = true;
+      closeSheets();
+    }
+
+    function clearHistory() {
+      historyData = [];
+      localStorage.removeItem('brilliant_calc_hist');
+      renderHistory();
+    }
+
+    function openSheet(type) {
+      historySheetEl.classList.remove('open');
+      infoSheetEl.classList.remove('open');
+      backdropEl.classList.add('open');
+      if (type === 'history') {
+        historySheetEl.classList.add('open');
+      } else if (type === 'info') {
+        infoSheetEl.classList.add('open');
+      }
+    }
+
+    function closeSheets() {
+      backdropEl.classList.remove('open');
+      historySheetEl.classList.remove('open');
+      infoSheetEl.classList.remove('open');
+    }
+  </script>
+</body>
+</html>
